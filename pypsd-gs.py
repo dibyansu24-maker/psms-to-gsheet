@@ -239,40 +239,39 @@ def proj_fetch(request_session,Stationlist,Proj_list,fetch_url,headers,payload,q
             while(Errorcount>=0 and Errorcount<RETRY_COUNT):
                 try:
                     post_req=request_session.head(uri)
-                    if (fetch_url is not null):
-                        post_req=request_session.post(fetch_url+'/ViewPB',headers=headers,json=payload)
-                        print(f'{bcolors.INFOYELLOW}>{bcolors.ENDC}{Sdomain.rstrip()}-{StationName}')
-                        pbout=post_req.text[8:-3]
-                        pbout=pbout.split('},{')
-                        totalinterns=0
-                        last_updated=''
-                        added_on=''
-                        for k in range(len(pbout)):
-                            pbout[k]=re.sub('\\\\"','',pbout[k])
-                            pbout[k]=re.sub('\\\\\\\\u0026','&',pbout[k])
-                            pbout[k]=pbout[k].split(',')
-                            temp=[]
-                            for subentry in pbout[k]:
-                                temprep=subentry.split(':',1)
-                                if len(temprep)>1:
-                                    temp.append(temprep[1].rstrip())
-                                else:
-                                    temp[-1]=temp[-1]+','+subentry.rstrip()
-                            pbout[k]=temp
-                            totalinterns=totalinterns+int(pbout[k][1])
-                            pbout[k][-4]=datetime.datetime.strptime(pbout[k][-4], '%b  %d %Y  %H:%M%p')
-                            if(k==0 or pbout[k][-4]>last_updated):
-                                last_updated=pbout[k][-4]
-                            if(k==0 or pbout[k][-4]<added_on):
-                                added_on=pbout[k][-4]
-                        Lupdcol.append(last_updated)
-                        Semcol.append(sem_eligible)
-                        Addcol.append(added_on)
-                        Eligcol.append(Proj_list[i][j][-6])
-                        TotalReqcol.append(totalinterns)
-                        Stripcol.append(Proj_list[i][j][-5])
-                        Linkcol.append(f'=HYPERLINK("{uri}","View Details")')
-                        Errorcount=-1
+                    post_req=request_session.post(fetch_url+'/ViewPB',headers=headers,json=payload)
+                    print(f'{bcolors.INFOYELLOW}>{bcolors.ENDC}{Sdomain.rstrip()}-{StationName}')
+                    pbout=post_req.text[8:-3]
+                    pbout=pbout.split('},{')
+                    totalinterns=0
+                    last_updated=''
+                    added_on=''
+                    for k in range(len(pbout)):
+                        pbout[k]=re.sub('\\\\"','',pbout[k])
+                        pbout[k]=re.sub('\\\\\\\\u0026','&',pbout[k])
+                        pbout[k]=pbout[k].split(',')
+                        temp=[]
+                        for subentry in pbout[k]:
+                            temprep=subentry.split(':',1)
+                            if len(temprep)>1:
+                                temp.append(temprep[1].rstrip())
+                            else:
+                                temp[-1]=temp[-1]+','+subentry.rstrip()
+                        pbout[k]=temp
+                        totalinterns=totalinterns+int(pbout[k][1])
+                        pbout[k][-4]=datetime.datetime.strptime(pbout[k][-4], '%b  %d %Y  %H:%M%p')
+                        if(k==0 or pbout[k][-4]>last_updated):
+                            last_updated=pbout[k][-4]
+                        if(k==0 or pbout[k][-4]<added_on):
+                            added_on=pbout[k][-4]
+                    Lupdcol.append(last_updated)
+                    Semcol.append(sem_eligible)
+                    Addcol.append(added_on)
+                    Eligcol.append(Proj_list[i][j][-6])
+                    TotalReqcol.append(totalinterns)
+                    Stripcol.append(Proj_list[i][j][-5])
+                    Linkcol.append(f'=HYPERLINK("{uri}","View Details")')
+                    Errorcount=-1
                 except:
                     print(f"{bcolors.FAIL}>{bcolors.ENDC}Error Encountered Retrieving data for {Sdomain.rstrip()}-{StationName}")
                     Errorcount+=1
@@ -322,7 +321,7 @@ if __name__=='__main__':
 
     wb = client.open_by_url(sheetlink)
 
-    projectlist=''           #'2023-2024 / SEM-I' #project list for which data will be fetched. Entire history is sent by the server thus has to be filtered
+    projectlist='2023-2024 / SEM-II'           #'2023-2024 / SEM-I' #project list for which data will be fetched. Entire history is sent by the server thus has to be filtered
 
     if (platform()[0:7]=="Windows"):
         import ctypes
